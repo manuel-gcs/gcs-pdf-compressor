@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GCS PDF Compressor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .card {
+            background: white;
+            width: 95%;
+            max-width: 430px;
+            padding: 40px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .security {
+            margin: 12px 0 20px 0;
+            font-size: 12px;
+            color: #3a7afe;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        button {
+            background: #3a7afe;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #2f6ae6;
+        }
+
+        #status {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>GCS PDF Compressor</h2>
+    <p>Upload a PDF and receive an optimized version automatically.</p>
+
+    <div class="security">
+        ✔ Secure Environment: Files are processed internally and never stored permanently.
+    </div>
+
+    <form id="uploadForm">
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+        <button type="submit">Compress PDF</button>
+    </form>
+
+    <div id="status"></div>
+</div>
+
+<script>
+document.getElementById("uploadForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const fileInput = document.getElementById("pdf");
+    if (!fileInput.files.length) {
+        alert("Please select a PDF file.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("pdf", fileInput.files[0]);
+
+    document.getElementById("status").innerText = "Processing... please wait.";
+
+    const response = await fetch("/", {
+        method: "POST",
+        body: formData
+    });
+
+    if (!response.ok) {
+        document.getElementById("status").innerText = "An error occurred while processing the PDF.";
+        return;
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "optimized.pdf";
+    a.click();
+
+    document.getElementById("status").innerText = "Done! Your optimized PDF was downloaded.";
+});
+</script>
+
+</body>
+</html>

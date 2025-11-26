@@ -4,6 +4,11 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Mostafaznv\PdfOptimizer\Optimizer;
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    readfile(__DIR__ . '/index.html');
+    exit;
+}
+
 // Apenas aceitar POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
