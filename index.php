@@ -5,7 +5,7 @@ require __DIR__ . '/vendor/autoload.php';
 use Mostafaznv\PdfOptimizer\Optimizer;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    readfile(__DIR__ . '/index.html');
+    readfile(__DIR__ . '/public/index.html');
     exit;
 }
 
