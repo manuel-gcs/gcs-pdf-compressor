@@ -1,0 +1,5 @@
+{
+    "require": {
+        "mostafaznv/pdf-optimizer": "^1.2"
+    }
+}
